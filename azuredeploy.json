@@ -67,12 +67,12 @@
     "variables": {},
     "resources": [
         {
-            "name": "[toLower('windowsVM1storage')]",
+            "name": "[parameters ('Virtual-Machine-Storage')]",
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2021-04-01",
             "location": "[resourceGroup().location]",
             "tags": {
-                "displayName": "windowsVM1 Storage Account"
+                "displayName": "[parameters ('Virtual-Machine-Storage')]"
             },
             "sku": {
                 "name": "Standard_LRS"
@@ -80,29 +80,29 @@
             "kind": "Storage"
         },
         {
-            "name": "windowsVM1-PublicIP",
+            "name": "[parameters ('Name of PublicIP')]",
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2020-11-01",
             "location": "[resourceGroup().location]",
             "tags": {
-                "displayName": "PublicIPAddress"
+                "displayName": "[parameters ('Name of PublicIP')]"
             },
             "properties": {
                 "publicIPAllocationMethod": "Dynamic",
                 "dnsSettings": {
-                    "domainNameLabel": "[toLower('windowsVM1')]"
+                    "domainNameLabel": "[parameters ('Name of PublicIP')]"
                 }
             }
         },
         {
-            "name": "windowsVM1-nsg",
+            "name": "[parameters ('Name of NSG')]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2020-11-01",
             "location": "[resourceGroup().location]",
             "properties": {
                 "securityRules": [
                     {
-                        "name": "nsgRule1",
+                        "name": "[parameters ('Name of NSG')]",
                         "properties": {
                             "description": "description",
                             "protocol": "Tcp",
@@ -119,15 +119,15 @@
             }
         },
         {
-            "name": "windowsVM1-VirtualNetwork",
+            "name": "[parameters ('Enter the name of Vitual Network')]",
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2020-11-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', 'windowsVM1-nsg')]"
+                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters ('Name of NSG'))]"
             ],
             "tags": {
-                "displayName": "windowsVM1-VirtualNetwork"
+                "displayName": "[parameters ('Enter the name of Vitual Network')]"
             },
             "properties": {
                 "addressSpace": {
@@ -137,11 +137,11 @@
                 },
                 "subnets": [
                     {
-                        "name": "windowsVM1-VirtualNetwork-Subnet",
+                        "name": "[parameters ('Enter the subnet')]",
                         "properties": {
                             "addressPrefix": "10.0.0.0/24",
                             "networkSecurityGroup": {
-                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', 'windowsVM1-nsg')]"
+                                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters ('Name of NSG'))]"
                             }
                         }
                     }
@@ -149,28 +149,28 @@
             }
         },
         {
-            "name": "windowsVM1-NetworkInterface",
+            "name": "[parameters ('Enter the Network Interface')]",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2020-11-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', 'windowsVM1-PublicIP')]",
-                "[resourceId('Microsoft.Network/virtualNetworks', 'windowsVM1-VirtualNetwork')]"
+                "[resourceId('Microsoft.Network/publicIPAddresses', parameters ('Name of PublicIP'))]",
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters ('Enter the name of Vitual Network'))]"
             ],
             "tags": {
-                "displayName": "windowsVM1 Network Interface"
+                "displayName": "[parameters ('Enter the Network Interface')]"
             },
             "properties": {
                 "ipConfigurations": [
                     {
-                        "name": "ipConfig1",
+                        "name": "[parameters ('Enter the Ip Config')]",
                         "properties": {
                             "privateIPAllocationMethod": "Dynamic",
                             "publicIPAddress": {
-                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', 'windowsVM1-PublicIP')]"
+                                "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters ('Name of PublicIP'))]"
                             },
                             "subnet": {
-                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'windowsVM1-VirtualNetwork', 'windowsVM1-VirtualNetwork-Subnet')]"
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters ('Enter the name of Vitual Network'), parameters ('Enter the subnet'))]"
                             }
                         }
                     }
@@ -178,25 +178,25 @@
             }
         },
         {
-            "name": "windowsVM1",
+            "name": "[parameters ('Name of Virtual Machine')]",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2021-03-01",
             "location": "[resourceGroup().location]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', toLower('windowsVM1storage'))]",
-                "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NetworkInterface')]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters ('Virtual-Machine-Storage'))]",
+                "[resourceId('Microsoft.Network/networkInterfaces', parameters ('Enter the Network Interface'))]"
             ],
             "tags": {
-                "displayName": "windowsVM1"
+                "displayName": "[parameters ('Name of Virtual Machine')]"
             },
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "Standard_A2_v2"
                 },
                 "osProfile": {
-                    "computerName": "windowsVM1",
-                    "adminUsername": "adminUsername",
-                    "adminPassword": "adminPassword"
+                    "computerName": "[parameters ('Name of OS profile')]",
+                    "adminUsername": "Mengemenge24241",
+                    "adminPassword": "blowblow2727"
                 },
                 "storageProfile": {
                     "imageReference": {
@@ -206,7 +206,7 @@
                         "version": "latest"
                     },
                     "osDisk": {
-                        "name": "windowsVM1OSDisk",
+                        "name": "[parameters ('Name of OS disk')]",
                         "caching": "ReadWrite",
                         "createOption": "FromImage"
                     }
@@ -214,14 +214,14 @@
                 "networkProfile": {
                     "networkInterfaces": [
                         {
-                            "id": "[resourceId('Microsoft.Network/networkInterfaces', 'windowsVM1-NetworkInterface')]"
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', parameters ('Enter the Network Interface'))]"
                         }
                     ]
                 },
                 "diagnosticsProfile": {
                     "bootDiagnostics": {
                         "enabled": true,
-                        "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower('windowsVM1storage'))).primaryEndpoints.blob]"
+                        "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', parameters ('Virtual-Machine-Storage'))).primaryEndpoints.blob]"
                     }
                 }
             }

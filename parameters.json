@@ -1,0 +1,36 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "Virtual-Machine-Storage": {
+            "value": "storage0002"
+        },
+        "Name of PublicIP": {
+            "value": "publicIp232344"
+        },
+        "Name of NSG": {
+            "value": "nsgchime111"
+        },
+        "Enter the name of Vitual Network": {
+            "value": "vnet202020"
+        },
+        "Enter the subnet": {
+            "value": "subnet212121"
+        },
+        "Enter the Network Interface": {
+            "value": "networkinter202024"
+        },
+        "Enter the Ip Config": {
+            "value": "IPconfig7890"
+        },
+        "Name of Virtual Machine": {
+            "value": "virtualmach29"
+        },
+        "Name of OS profile": {
+            "value": "osprofile9090"
+        },
+        "Name of OS disk": {
+            "value": "osdisk6542"
+        }
+    }
+}
